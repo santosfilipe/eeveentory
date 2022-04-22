@@ -22,7 +22,7 @@ func GetAssets(c *gin.Context) {
 
 	for rows.Next() {
 		var asset Asset
-		err := rows.Scan(&asset.id, &asset.assettype, &asset.ip, &asset.environment, &asset.pci, &asset.sox, &asset.gdpr, &asset.datacenter, &asset.owner)
+		err := rows.Scan(&asset.Id, &asset.Assettype, &asset.Ip, &asset.Environment, &asset.Pci, &asset.Sox, &asset.Gdpr, &asset.Datacenter, &asset.Owner)
 		if err != nil {
 			log.Fatal(err)
 		}

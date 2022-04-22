@@ -9,15 +9,15 @@ import (
 )
 
 type Asset struct {
-	id          uint64 `json:"id"`
-	assettype   string `json:"assettype"`
-	ip          string `json:"ip"`
-	environment string `json:"environment"`
-	pci         bool   `json:"pci"`
-	sox         bool   `json:"sox"`
-	gdpr        bool   `json:"gdpr"`
-	datacenter  string `json:"datacenter"`
-	owner       int    `json:"owner"`
+	Id          uint64 `json:"id"`
+	Assettype   string `json:"assettype"`
+	Ip          string `json:"ip"`
+	Environment string `json:"environment"`
+	Pci         bool   `json:"pci"`
+	Sox         bool   `json:"sox"`
+	Gdpr        bool   `json:"gdpr"`
+	Datacenter  string `json:"datacenter"`
+	Owner       int    `json:"owner"`
 }
 
 type Owner struct {
