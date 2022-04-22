@@ -13,7 +13,7 @@ func GetAssets(c *gin.Context) {
 	cfg := DatabaseConfiguration()
 	db := ConnectToDb(cfg)
 
-	rows, err := db.Query("SELECT * FROM assets")
+	rows, err := db.Query("SELECT * FROM asset")
 	if err != nil {
 		log.Fatal(err)
 	}
