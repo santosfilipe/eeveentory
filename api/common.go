@@ -27,11 +27,12 @@ type Owner struct {
 
 func DatabaseConfiguration() mysql.Config {
 	cfg := mysql.Config{
-		User:   os.Getenv("DBUSER"),
-		Passwd: os.Getenv("DBPASS"),
-		Net:    "tcp",
-		Addr:   "database-eeveentory.cwr4vgen2iib.us-east-1.rds.amazonaws.com:3306",
-		DBName: "eeveentory",
+		User:                 os.Getenv("DBUSER"),
+		Passwd:               os.Getenv("DBPASS"),
+		Net:                  "tcp",
+		Addr:                 "database-eeveentory.cwr4vgen2iib.us-east-1.rds.amazonaws.com:3306",
+		DBName:               "eeveentory",
+		AllowNativePasswords: true,
 	}
 
 	return cfg
