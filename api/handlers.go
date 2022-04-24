@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 
@@ -35,4 +36,26 @@ func GetAssets(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, assets)
+}
+
+func GetAssetsByIp(c *gin.Context) {
+	var asset Asset
+	ip := c.Param("ip")
+
+	cfg := DatabaseConfiguration()
+	db := ConnectToDb(cfg)
+
+	rows, err := db.Query("SELECT * FROM asset WHERE ip = ?", ip)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = rows.Scan(&asset.Id, &asset.Assettype, &asset.Ip, &asset.Environment, &asset.Pci, &asset.Sox, &asset.Gdpr, &asset.Datacenter, &asset.Owner)
+	if err == sql.ErrNoRows {
+		log.Println(err)
+	} else if err != nil && err != sql.ErrNoRows {
+		log.Println(err)
+	}
+
+	c.IndentedJSON(http.StatusOK, asset)
 }

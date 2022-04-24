@@ -21,8 +21,8 @@ type Asset struct {
 }
 
 type Owner struct {
-	teamid   uint64 `json:"teamid"`
-	teamname string `json:"teamname"`
+	Teamid   uint64 `json:"teamid"`
+	Teamname string `json:"teamname"`
 }
 
 func DatabaseConfiguration() mysql.Config {
