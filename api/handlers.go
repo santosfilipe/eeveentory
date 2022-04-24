@@ -50,6 +50,8 @@ func GetAssetsByIp(c *gin.Context) {
 		log.Fatal(err)
 	}
 
+	defer rows.Close()
+
 	err = rows.Scan(&asset.Id, &asset.Assettype, &asset.Ip, &asset.Environment, &asset.Pci, &asset.Sox, &asset.Gdpr, &asset.Datacenter, &asset.Owner)
 	if err == sql.ErrNoRows {
 		log.Println(err)
