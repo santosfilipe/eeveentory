@@ -45,6 +45,7 @@ func GetAssetsByIp(c *gin.Context) {
 	cfg := DatabaseConfiguration()
 	db := ConnectToDb(cfg)
 
+	// Modify to use db.QueryRow() and avoid the for loop.
 	rows, err := db.Query("SELECT * FROM asset WHERE ip = ?", ip)
 	if err != nil {
 		log.Fatal(err)

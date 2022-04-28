@@ -3,9 +3,9 @@ package api
 import (
 	"database/sql"
 	"log"
-	"os"
 
 	"github.com/go-sql-driver/mysql"
+	"github.com/santosfilipe/eeveentory/aws"
 )
 
 type Asset struct {
@@ -26,9 +26,15 @@ type Owner struct {
 }
 
 func DatabaseConfiguration() mysql.Config {
+	dbpassword, err := aws.GetRdsSecret()
+
+	if err != nil {
+		log.Println(err)
+	}
+
 	cfg := mysql.Config{
-		User:                 os.Getenv("DBUSER"),
-		Passwd:               os.Getenv("DBPASS"),
+		User:                 "admin",
+		Passwd:               dbpassword,
 		Net:                  "tcp",
 		Addr:                 "database-eeveentory.cwr4vgen2iib.us-east-1.rds.amazonaws.com:3306",
 		DBName:               "eeveentory",
