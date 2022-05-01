@@ -5,6 +5,7 @@
 **eeveentory** tech stack:
 
 - Amazon RDS
-- EC2
+- AWS ECS
+- AWS Secrets Manager
 - Docker
 - Go
