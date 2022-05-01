@@ -8,7 +8,7 @@ on:
 
 env:
   AWS_REGION: eu-west-2                                                                                               # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: public.ecr.aws/p3p2p5j6/eeveentory                                                                  # set this to your Amazon ECR repository name
+  ECR_REPOSITORY: eeveentory                                                                                          # set this to your Amazon ECR repository name
   ECS_SERVICE: eeveentory-ecs-task                                                                                    # set this to your Amazon ECS service name
   ECS_CLUSTER: roadtoseceng                                                                                           # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: /Users/fdossantos/Documents/Personal/Learning/RoadToSecEng/eeveentory/eeveentory-ecs-task.json # set this to the path to your Amazon ECS task definition
@@ -40,7 +40,7 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY: p3p2p5j6/eeveentory
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           # Build a docker container and
