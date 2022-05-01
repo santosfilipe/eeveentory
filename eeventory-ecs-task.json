@@ -56,7 +56,7 @@
       "EXTERNAL",
       "EC2"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:972560550860:task-definition/eeveentory-ecs-task:1",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:972560550860:task-definition/eeveentory-ecs-task",
     "family": "eeveentory-ecs-task",
     "requiresAttributes": [],
     "pidMode": null,
