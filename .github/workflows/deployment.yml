@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  AWS_REGION: eu-west-2                                                                                               # set this to your preferred AWS region, e.g. us-west-1
+  AWS_REGION: us-east-1                                                                                               # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: eeveentory                                                                                          # set this to your Amazon ECR repository name
   ECS_SERVICE: eeveentory-ecs-task                                                                                    # set this to your Amazon ECS service name
   ECS_CLUSTER: roadtoseceng                                                                                           # set this to your Amazon ECS cluster name
@@ -40,7 +40,7 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: public.ecr.aws/p3p2p5j6 # ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           # Build a docker container and
