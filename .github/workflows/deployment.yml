@@ -11,7 +11,7 @@ env:
   ECR_REPOSITORY: eeveentory                                                                                          # set this to your Amazon ECR repository name
   ECS_SERVICE: eeveentory-ecs-task                                                                                    # set this to your Amazon ECS service name
   ECS_CLUSTER: roadtoseceng                                                                                           # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: /Users/fdossantos/Documents/Personal/Learning/RoadToSecEng/eeveentory/eeveentory-ecs-task.json # set this to the path to your Amazon ECS task definition
+  ECS_TASK_DEFINITION: eeventory-ecs-task.json # set this to the path to your Amazon ECS task definition
                                                                                                                       # file, e.g. .aws/task-definition.json
   CONTAINER_NAME: eeveentory                                                                                          # set this to the name of the container in the
                                                                                                                       # containerDefinitions section of your task definition
