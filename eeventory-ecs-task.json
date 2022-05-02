@@ -1,9 +1,9 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:972560550860:task-definition/eeveentory-ecs-task:3",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:972560550860:task-definition/eeventory-ecs-task:1",
     "containerDefinitions": [
         {
             "name": "eeveentory",
-            "image": "public.ecr.aws/p3p2p5j6/eeveentory:039843c35bc48075633ec0c0527bd9eb11852fa2",
+            "image": "public.ecr.aws/p3p2p5j6/eeveentory:latest",
             "cpu": 0,
             "memory": 500,
             "portMappings": [
@@ -20,7 +20,7 @@
         }
     ],
     "family": "eeveentory-ecs-task",
-    "revision": 3,
+    "revision": 1,
     "volumes": [],
     "status": "ACTIVE",
     "placementConstraints": [],
