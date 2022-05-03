@@ -11,7 +11,7 @@ env:
   ECR_REPOSITORY: eeveentory                                                                                          # set this to your Amazon ECR repository name
   ECS_SERVICE: eeveentory-ecs-task                                                                                    # set this to your Amazon ECS service name
   ECS_CLUSTER: roadtoseceng                                                                                           # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: eeventory-ecs-task.json # set this to the path to your Amazon ECS task definition
+  ECS_TASK_DEFINITION: eeveentory-ecs-task.json # set this to the path to your Amazon ECS task definition
                                                                                                                       # file, e.g. .aws/task-definition.json
   CONTAINER_NAME: eeveentory                                                                                          # set this to the name of the container in the
                                                                                                                       # containerDefinitions section of your task definition
@@ -53,7 +53,7 @@ jobs:
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@97587c9d45a4930bf0e3da8dd2feb2a463cf4a3a
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: ${{ env.CONTAINER_NAME }}

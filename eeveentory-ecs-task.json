@@ -1,0 +1,38 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:972560550860:task-definition/eeveentory:1",
+    "containerDefinitions": [
+        {
+            "name": "eeveentory",
+            "image": "public.ecr.aws/p3p2p5j6/eeveentory:latest",
+            "cpu": 0,
+            "memory": 500,
+            "portMappings": [
+                {
+                    "containerPort": 8888,
+                    "hostPort": 8888,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "mountPoints": [],
+            "volumesFrom": []
+        }
+    ],
+    "family": "eeveentory",
+    "revision": 1,
+    "volumes": [],
+    "status": "ACTIVE",
+    "placementConstraints": [],
+    "compatibilities": [
+        "EXTERNAL",
+        "EC2"
+    ],
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "cpu": "1024",
+    "memory": "1024",
+    "registeredAt": "2022-05-03T22:17:42.914000+02:00",
+    "registeredBy": "arn:aws:iam::972560550860:user/Administrator"
+}
