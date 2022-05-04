@@ -45,21 +45,13 @@ func GetAssetsByIp(c *gin.Context) {
 	cfg := DatabaseConfiguration()
 	db := ConnectToDb(cfg)
 
-	// Modify to use db.QueryRow() and avoid the for loop.
-	rows, err := db.Query("SELECT * FROM asset WHERE ip = ?", ip)
-	if err != nil {
-		log.Fatal(err)
-	}
+	rows := db.QueryRow("SELECT * FROM asset WHERE ip = ?", ip)
 
-	defer rows.Close()
-
-	for rows.Next() {
-		err = rows.Scan(&asset.Id, &asset.Assettype, &asset.Ip, &asset.Environment, &asset.Pci, &asset.Sox, &asset.Gdpr, &asset.Datacenter, &asset.Owner)
-		if err == sql.ErrNoRows {
-			log.Println(err)
-		} else if err != nil && err != sql.ErrNoRows {
-			log.Println(err)
-		}
+	err := rows.Scan(&asset.Id, &asset.Assettype, &asset.Ip, &asset.Environment, &asset.Pci, &asset.Sox, &asset.Gdpr, &asset.Datacenter, &asset.Owner)
+	if err == sql.ErrNoRows {
+		log.Println(err)
+	} else if err != nil && err != sql.ErrNoRows {
+		log.Println(err)
 	}
 
 	c.IndentedJSON(http.StatusOK, asset)
