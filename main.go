@@ -15,7 +15,7 @@ func ConfigureLogger() {
 }
 
 func main() {
-	log.Println("eeveentory is up & running!")
+	log.Println("IMPORTANT: eeveentory is up & running!")
 	ConfigureLogger()
 
 	router := gin.Default()
