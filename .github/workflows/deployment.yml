@@ -52,15 +52,27 @@ jobs:
           aws-region: eu-west-3
         run: |
           aws ec2 start-instances --instance-ids ${{ secrets.EC2_INSTANCE_ID }}
-      
-      - name: AWS SSM Send-Command
-        uses: peterkimzz/aws-ssm-send-command@master
-        id: ssm
-        with:
+
+      - name: Get ECR credentials using AWS SSM command
+        env:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-3
-          instance-ids: ${{ secrets.EC2_INSTANCE_ID }}
+        run: |
+          aws ssm send-command --instance-ids i-0904baef132f078c4 --document-name "AWS-RunShellScript" --parameters 'commands=["aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 972560550860.dkr.ecr.eu-west-3.amazonaws.com"]'
 
-          working-directory: /home/ec2-user
-          command: aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 972560550860.dkr.ecr.eu-west-3.amazonaws.com && docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG && sudo docker run -d -p 8888:8888 $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Pull latest eeveentory image using AWS SSM command
+        env:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+        run: |
+          aws ssm send-command --instance-ids i-0904baef132f078c4 --document-name "AWS-RunShellScript" --parameters 'commands=["docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"]'
+      
+      - name: Run latest eeveentory image using AWS SSM command
+        env:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+        run: |
+          aws ssm send-command --instance-ids i-0904baef132f078c4 --document-name "AWS-RunShellScript" --parameters 'commands=["sudo docker run -d -p 8888:8888 $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"]'
