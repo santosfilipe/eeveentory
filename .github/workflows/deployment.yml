@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  AWS_REGION: us-east-1                                                                                               # set this to your preferred AWS region, e.g. us-west-1
+  AWS_REGION: eu-west-3                                                                                              # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: eeveentory                                                                                          # set this to your Amazon ECR repository name
   
 jobs:
@@ -25,7 +25,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: eu-west-3
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -34,13 +34,25 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY: 972560550860.dkr.ecr.us-east-1.amazonaws.com # ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: 972560550860.dkr.ecr.eu-west-3.amazonaws.com # ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/p3p2p5j6
+          aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 972560550860.dkr.ecr.eu-west-3.amazonaws.com
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+    
+      - name: Deploy to EC2
+      uses: easingthemes/ssh-deploy@main
+      env:
+        SSH_PRIVATE_KEY: ${ { secrets.EC2_SSH_KEY }}
+        REMOTE_HOST: ${ { secrets.HOST_DNS }}
+        REMOTE_USER: ${ { secrets.USERNAME }}
+        TARGET: ${ { secrets.TARGET_DIR }}
+      run: |
+        aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 972560550860.dkr.ecr.eu-west-3.amazonaws.com
+        docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        sudo docker run -d -p 8888:8888 $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
