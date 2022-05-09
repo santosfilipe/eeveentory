@@ -34,6 +34,10 @@ jobs:
           aws-region: eu-west-3
         run: |
           aws ec2 start-instances --instance-ids ${{ secrets.EC2_INSTANCE_ID }}
+      
+      - name: Instance configuration startup
+        run: sleep 40s
+        shell: bash
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -49,46 +53,46 @@ jobs:
           # push it to ECR so that it can
           # be deployed to ECS.
           aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 972560550860.dkr.ecr.eu-west-3.amazonaws.com
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:latest"
       
-      # - name: Stop current eeveentory Docker container 
-      #   env:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: eu-west-3
-      #   run: |
-      #     aws ssm send-command --instance-ids ${{ secrets.EC2_INSTANCE_ID }} --document-name "AWS-RunShellScript" --parameters 'commands=["docker kill $(docker ps -q)"]'
+      - name: Stop current eeveentory Docker container 
+        env:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+        run: |
+          aws ssm send-command --instance-ids ${{ secrets.EC2_INSTANCE_ID }} --document-name "AWS-RunShellScript" --parameters 'commands=["docker kill $(docker ps -q)"]'
 
-      # - name: Get ECR credentials using AWS SSM command
-      #   env:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: eu-west-3
-      #   run: |
-      #     aws ssm send-command --instance-ids ${{ secrets.EC2_INSTANCE_ID }} --document-name "AWS-RunShellScript" --parameters 'commands=["aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 972560550860.dkr.ecr.eu-west-3.amazonaws.com"]'
+      - name: Get ECR credentials using AWS SSM command
+        env:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+        run: |
+          aws ssm send-command --instance-ids ${{ secrets.EC2_INSTANCE_ID }} --document-name "AWS-RunShellScript" --parameters 'commands=["aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 972560550860.dkr.ecr.eu-west-3.amazonaws.com"]'
       
-      # - name: Sleep for 10 seconds
-      #   run: sleep 10s
-      #   shell: bash
+      - name: Sleep for 10 seconds
+        run: sleep 10s
+        shell: bash
 
-      # - name: Pull latest eeveentory image using AWS SSM command
-      #   env:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: eu-west-3
-      #   run: |
-      #     aws ssm send-command --instance-ids ${{ secrets.EC2_INSTANCE_ID }} --document-name "AWS-RunShellScript" --parameters 'commands=["docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"]'
+      - name: Pull latest eeveentory image using AWS SSM command
+        env:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+        run: |
+          aws ssm send-command --instance-ids ${{ secrets.EC2_INSTANCE_ID }} --document-name "AWS-RunShellScript" --parameters 'commands=["docker pull 972560550860.dkr.ecr.eu-west-3.amazonaws.com/eeveentory:latest"]'
 
-      # - name: Sleep for 30 seconds
-      #   run: sleep 30s
-      #   shell: bash
+      - name: Sleep for 30 seconds
+        run: sleep 30s
+        shell: bash
       
-      # - name: Run latest eeveentory image using AWS SSM command
-      #   env:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: eu-west-3
-      #   run: |
-      #     aws ssm send-command --instance-ids ${{ secrets.EC2_INSTANCE_ID }} --document-name "AWS-RunShellScript" --parameters 'commands=["sudo docker run -d -p 8888:8888 $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"]'
+      - name: Run latest eeveentory image using AWS SSM command
+        env:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+        run: |
+          aws ssm send-command --instance-ids ${{ secrets.EC2_INSTANCE_ID }} --document-name "AWS-RunShellScript" --parameters 'commands=["sudo docker run -d -p 8888:8888 972560550860.dkr.ecr.eu-west-3.amazonaws.com/eeveentory:latest"]'
