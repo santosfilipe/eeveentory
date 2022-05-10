@@ -16,6 +16,7 @@ func ConfigureLogger() {
 
 func main() {
 	log.Println("IMPORTANT: eeveentory is up & running!")
+	log.Println("IMPORTANT: Deployment done through Github Actions!")
 	ConfigureLogger()
 
 	router := gin.Default()
