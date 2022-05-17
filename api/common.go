@@ -26,14 +26,14 @@ type Owner struct {
 }
 
 func DatabaseConfiguration() mysql.Config {
-	dbpassword, err := aws.GetRdsSecret()
+	dbuser, dbpassword, err := aws.GetRdsSecret()
 
 	if err != nil {
 		log.Println(err)
 	}
 
 	cfg := mysql.Config{
-		User:                 "admin",
+		User:                 dbuser,
 		Passwd:               dbpassword,
 		Net:                  "tcp",
 		Addr:                 "database-eeveentory.cwr4vgen2iib.us-east-1.rds.amazonaws.com:3306",

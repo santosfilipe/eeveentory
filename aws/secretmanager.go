@@ -24,7 +24,7 @@ type Credential struct {
 	DbInstanceIdentifier string `json:"dbInstanceIdentifier"`
 }
 
-func GetRdsSecret() (string, error) {
+func GetRdsSecret() (string, string, error) {
 	var dbcredential Credential
 
 	secretId := "arn:aws:secretsmanager:us-east-1:972560550860:secret:eeveentory/mysql-z3dUpr"
@@ -35,7 +35,7 @@ func GetRdsSecret() (string, error) {
 	if err != nil {
 		// Handle session creation error
 		log.Println(err)
-		return "", err
+		return "", "", err
 	}
 	svc := secretsmanager.New(sess, aws.NewConfig().WithRegion(region))
 	input := &secretsmanager.GetSecretValueInput{
@@ -75,7 +75,7 @@ func GetRdsSecret() (string, error) {
 			// Message from an error.
 			log.Println(err)
 		}
-		return "", err
+		return "", "", err
 	}
 
 	secretString := *result.SecretString
@@ -85,7 +85,15 @@ func GetRdsSecret() (string, error) {
 		fmt.Println("error:", err)
 	}
 
-	dbpassword := dbcredential.Password
+	// dbpassword := dbcredential.Password
+	dbuser, dbpassword := ParseSecretsManagerResponse(dbcredential)
 
-	return dbpassword, nil
+	return dbuser, dbpassword, nil
+}
+
+func ParseSecretsManagerResponse(secret Credential) (string, string) {
+	dbuser := secret.Username
+	dbpassword := secret.Password
+
+	return dbuser, dbpassword
 }
