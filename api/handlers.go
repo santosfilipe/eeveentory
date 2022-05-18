@@ -35,7 +35,7 @@ func GetAssets(c *gin.Context) {
 		log.Fatal(err)
 	}
 
-	c.IndentedJSON(http.StatusOK, assets)
+	c.JSON(http.StatusOK, assets)
 }
 
 func GetAssetsByIp(c *gin.Context) {
@@ -54,5 +54,5 @@ func GetAssetsByIp(c *gin.Context) {
 		log.Println(err)
 	}
 
-	c.IndentedJSON(http.StatusOK, asset)
+	c.JSON(http.StatusOK, asset)
 }
